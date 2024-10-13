@@ -71,6 +71,38 @@ def diophantine_all_soln(a: int, b: int, c: int, n: int = 2) -> None:
         print(x, y)
 
 
+def diophantine_soln_in_range(a: int, b: int, c: int, t_min: int, t_max: int) -> list[tuple[float, float]]:
+    """
+    Finding all solutions of the Diophantine equation within a specific range of `t`.
+
+    Let gcd(a,b) = d, a = d*p, b = d*q. If (x0,y0) is a solution of the
+    Diophantine Equation a*x + b*y = c, then all the solutions have the form 
+    a(x0 + t*q) + b(y0 - t*p) = c, where t is an integer.
+    
+    This function returns all solutions where `t` is within the range [t_min, t_max].
+
+    >>> diophantine_soln_in_range(10, 6, 14, -2, 2)
+    [(-13.0, 19.0), (-10.0, 14.0), (-7.0, 9.0), (-4.0, 4.0), (-1.0, -1.0)]
+
+    >>> diophantine_soln_in_range(391, 299, -69, 0, 2)
+    [(9.0, -12.0), (22.0, -29.0), (35.0, -46.0)]
+
+    """
+
+    (x0, y0) = diophantine(a, b, c)  # Initial solution
+    d = greatest_common_divisor(a, b)
+    p = a // d
+    q = b // d
+
+    solutions = []
+    for t in range(t_min, t_max + 1):
+        x = x0 + t * q
+        y = y0 - t * p
+        solutions.append((x, y))
+
+    return solutions
+
+
 def extended_gcd(a: int, b: int) -> tuple[int, int, int]:
     """
     Extended Euclid's Algorithm : If d divides a and b and d = a*x + b*y for integers
@@ -105,5 +137,6 @@ if __name__ == "__main__":
 
     testmod(name="diophantine", verbose=True)
     testmod(name="diophantine_all_soln", verbose=True)
+    testmod(name="diophantine_soln_in_range", verbose=True)
     testmod(name="extended_gcd", verbose=True)
     testmod(name="greatest_common_divisor", verbose=True)
